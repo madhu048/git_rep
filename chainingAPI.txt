@@ -1,0 +1,152 @@
+{
+	"info": {
+		"_postman_id": "dfeb6259-ed4a-41e8-b7a5-5b3cf5e8d517",
+		"name": "chaining of api's",
+		"description": "Establishing the connection between HTTP requests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29135473"
+	},
+	"item": [
+		{
+			"name": "New Folder",
+			"item": [
+				{
+					"name": "POSTRequest",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Storing response into a veriable\r",
+									"var jsondata = JSON.parse(responseBody);\r",
+									"// Retriving and storing id into a environment veriable frome response\r",
+									"pm.environment.set(\"id\",jsondata.id);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Rajinikanth\",\r\n    \"profession\":\"Acting\",\r\n    \"other_names\":\"Super Star\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/students",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"students"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GETRequest",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// status code and text validation\r",
+									"pm.test(\"status code is 200 and text is ok\",()=>{\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"// status time validation\r",
+									"pm.test(\"status time is below the 100ms\",()=>{\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(100);\r",
+									"});\r",
+									"// header validation\r",
+									"pm.test(\"content-type is application/json; charset=utf-8\",()=>{\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.eql(\"application/json; charset=utf-8\");\r",
+									"});\r",
+									"// json value type validation\r",
+									"var jdata = pm.response.json(); \r",
+									"pm.test(\"name rajinikabt is a string\",()=>{\r",
+									"    pm.expect(jdata.name).to.be.a(\"string\");\r",
+									"    pm.expect(jdata.profession).to.be.a(\"string\");\r",
+									"});\r",
+									"// json field validation\r",
+									"pm.test(\"response field validation\",()=>{\r",
+									"    pm.expect(jdata.name).to.eql(\"Rajinikanth\");\r",
+									"    pm.expect(jdata.profession).to.eql(\"Acting\");\r",
+									"    pm.expect(jdata.other_names).to.eql(\"Super Star\");\r",
+									"});\r",
+									"// "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/students/{{id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"students",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETERequest",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// status code validation\r",
+									"pm.test(\"status code is 200 and text is OK\",()=>{\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"}); "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/students/{{id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"students",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Storing the multiple requests in a single folder"
+		}
+	]
+}
